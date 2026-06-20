@@ -1,12 +1,16 @@
 # envspec
 
+[![CI](https://github.com/andersonhowever/envspec/actions/workflows/ci.yml/badge.svg)](https://github.com/andersonhowever/envspec/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.9%E2%80%933.13-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 **Опиши конфиг один раз — получи валидацию, `.env.example`, доку, диагностику и миграции.**
 
 Единый строгий и человекочитаемый стандарт для переменных окружения и конфигов
 Python-проектов. README больше не расходится с реальными переменными, а переименование
 переменной не ломает прод молча.
 
-> Статус: ранняя разработка (v0.4). Публичный API стабилизируется к v1.0 — см. `ROADMAP.md`.
+> Статус: pre-1.0 (v0.5). Публичный API стабилизируется к v1.0 — см. `ROADMAP.md`.
 
 ## Зачем
 
