@@ -2,6 +2,18 @@
 
 Формат основан на [Keep a Changelog](https://keepachangelog.com/), версии по [SemVer](https://semver.org/).
 
+## [Unreleased] — путь к 1.0
+### Added
+- Выбор профиля через переменную `ENVSPEC_PROFILE` (когда аргумент `profile=` не передан;
+  явный аргумент имеет приоритет) — закрывает заявленное в SPEC §2 поведение.
+- SPEC §9: заморозка публичного API и semver-гарантии (что стабильно, что внутреннее).
+- `tests/test_public_api.py`: снапшот публичной поверхности (экспорты, сигнатуры,
+  состав `Result`/`Problem`, иерархия исключений) — ловит случайные ломающие изменения.
+- CI (GitHub Actions): матрица Python 3.9–3.13, lint+type+test, build; workflow
+  trusted-publishing (TestPyPI → PyPI). Бейджи в README.
+### Changed
+- SPEC §2: сигнатура `Config.load/validate` приведена к реальной (устранено расхождение).
+
 ## [0.5.0] — источники YAML/JSON + pydantic-интероп
 ### Added
 - `envspec.contrib.pydantic.to_pydantic(Config)` — генерация модели pydantic v2 из

@@ -52,12 +52,13 @@ class AppConfig(Config):
 
 Поведение:
 - Метакласс собирает все `Field` в порядке объявления → `AppConfig.__fields__`.
-- `cfg = AppConfig.load(sources=..., profile=...)` — собрать значения, привести типы,
+- `cfg = AppConfig.load(*, dotenv_path=".env", use_environ=True, overrides=None,
+  profile=None, yaml_path=None, json_path=None)` — собрать значения, привести типы,
   провалидировать. Возвращает инстанс с атрибутами-значениями (`cfg.api_url`).
 - При ошибках валидации `load()` бросает `ValidationError`, агрегирующую **все**
   проблемы сразу (не падать на первой).
-- `AppConfig.validate(...)` — то же, но возвращает структуру результата (ok/errors/warnings)
-  без выброса; используется CLI и тестами.
+- `AppConfig.validate(...)` — те же аргументы, но возвращает `Result`
+  (`ok`, `values`, `problems`, `warnings`, `origins`) без выброса; используется CLI и тестами.
 
 ### Источники и приоритет (`sources.py`)
 По умолчанию (от низшего приоритета к высшему):
@@ -205,3 +206,30 @@ m = Model(API_URL="https://x", TIMEOUT_S=30)
 - `--format json` даёт валидный JSON для validate/diff/doctor.
 - `to_pydantic` строит модель с корректными типами, required/default, границами,
   `choices` (Literal) и пометкой secret; имена полей = env-имена.
+
+---
+
+## 9. Публичный API и semver (заморожено в 1.0)
+
+С версии **1.0** перечисленное ниже — стабильный контракт. Ломающее изменение —
+только мажорная версия (см. CLAUDE.md §6). Всё остальное (в т.ч. имена с `_`,
+модули `sources`/`diff`/`doctor`/`migrate`/`render` и их функции) — внутреннее
+и может меняться в minor/patch.
+
+**Стабильно (semver-покрыто):**
+- `envspec.__version__`.
+- `from envspec import Config, Field, Profile, migration` и исключения
+  `EnvspecError`, `SpecError`, `ValidationError`, `SourceError`, `MigrationError`.
+- Конструктор `Field(...)` — параметры из §1.
+- `Config.load(...)` / `Config.validate(...)` — сигнатуры из §2; `Config.__fields__`.
+- Структура результата: `Result(ok, values, problems, warnings, origins)` и
+  `Problem(name, summary, expected, got, fix, secret)` — состав полей.
+- `Profile(overrides, require)`; декоратор `migration(label)` и билдер `m`
+  (`rename`/`transform`/`deprecate`); выбор профиля через `ENVSPEC_PROFILE`.
+- `from envspec.contrib.pydantic import to_pydantic` (extra `envspec[pydantic]`).
+- CLI: подкоманды и флаги из §4; коды выхода `0/1/2`.
+
+**Явно НЕ часть публичного API (может меняться):**
+- Программные функции `sources.*`, `diff.*`, `doctor.*`, `migrate.apply/plan/rename_map`,
+  `render.*` — используются CLI, но не гарантируются как библиотечный API в 1.x.
+- Внутренние типы `Migration`, `Op`, метакласс, любые `_`-имена.

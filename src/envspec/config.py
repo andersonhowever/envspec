@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from dataclasses import field as _dc_field
 from typing import Any
@@ -68,6 +69,8 @@ class Config(metaclass=_ConfigMeta):
         yaml_path: str | None = None,
         json_path: str | None = None,
     ) -> Result:
+        if profile is None:
+            profile = os.environ.get("ENVSPEC_PROFILE") or None
         prof = cls.__profiles__.get(profile) if profile else None
         prof_overrides = prof.overrides if prof else None
         extra_required = set(prof.require) if prof else set()
