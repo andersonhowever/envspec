@@ -45,7 +45,7 @@
 
 ## v1.0 — стабилизация и публикация
 - [x] Заморозка публичного API (semver-гарантии): SPEC §9 + снапшот-тест `test_public_api.py`.
-- [ ] Полный README с примерами всех команд, CHANGELOG.
+- [x] Полный README с примерами всех команд (реальный вывод), CHANGELOG.
 - [x] CI: матрица Python 3.9–3.13, lint+type+test, сборка (`.github/workflows/ci.yml`).
 - [x] Workflow trusted publishing TestPyPI → PyPI (`.github/workflows/publish.yml`); запуск релиза — за мейнтейнером.
 - [~] Бейджи (CI/Python/License добавлены; PyPI-бейдж — после первой публикации).
