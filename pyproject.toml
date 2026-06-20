@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "envspec"
+version = "0.4.0"
+description = "Опиши конфиг один раз — получи валидацию, .env.example, доку, диагностику и миграции."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Aleksandr Sulimov", email = "andersonhowever@users.noreply.github.com" }]
+keywords = ["env", "dotenv", "config", "configuration", "validation", "12factor", "settings"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = []  # zero-deps core
+
+[project.optional-dependencies]
+yaml = ["PyYAML>=6.0"]
+pydantic = ["pydantic>=2.0"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.6",
+    "mypy>=1.11,<2.0",  # 2.x требует target python>=3.10; ядро поддерживает 3.9
+    "build>=1.2",
+    "twine>=5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/andersonhowever/envspec"
+Repository = "https://github.com/andersonhowever/envspec"
+Issues = "https://github.com/andersonhowever/envspec/issues"
+
+[project.scripts]
+envspec = "envspec.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/envspec"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.9"
+strict = true
+files = ["src/envspec"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
