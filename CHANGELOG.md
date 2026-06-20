@@ -2,6 +2,16 @@
 
 Формат основан на [Keep a Changelog](https://keepachangelog.com/), версии по [SemVer](https://semver.org/).
 
+## [0.5.0] — источники YAML/JSON + pydantic-интероп
+### Added
+- `envspec.contrib.pydantic.to_pydantic(Config)` — генерация модели pydantic v2 из
+  определения Config (типы, required/default, границы, `choices`→`Literal`, `doc`,
+  пометка secret; имена полей = env-имена). Extra `envspec[pydantic]`.
+- `docs/sources.md`: документация по источникам значений и приоритету слияния.
+### Notes
+- YAML/JSON-источники были добавлены ранее (в 0.3.0) авансом; в 0.5 закрыт остаток
+  вехи — pydantic-интероп и документация источников.
+
 ## [0.4.0] — diff + миграции (киллер-фича)
 ### Added
 - `migrate.py`: декоратор `@migration`, операции `rename`/`transform`/`deprecate`,

@@ -105,9 +105,26 @@ class AppConfig(Config):
 
 В профиле `prod` `verify_ssl` форсится в `true`, а `api_token` становится обязательным.
 
+## Pydantic-интероп (опционально)
+
+Описал конфиг один раз в `envspec` — получи готовую модель **pydantic v2**, не дублируя
+определение. Требует `pip install "envspec[pydantic]"`.
+
+```python
+from envspec.contrib.pydantic import to_pydantic
+
+Model = to_pydantic(AppConfig)          # type[pydantic.BaseModel]
+m = Model(API_URL="https://x", TIMEOUT_S=30)
+```
+
+Типы, `required`/`default`, границы (`min/max` → `ge/le` или `min_length/max_length`),
+`choices` (→ `Literal`), `doc` и пометка `secret` переносятся автоматически; имена полей
+модели совпадают с env-именами. Подробнее — SPEC §7.
+
 ## Документация проекта
 
 - `SPEC.md` — спецификация API и CLI (источник истины).
+- `docs/sources.md` — источники значений и приоритет слияния.
 - `ROADMAP.md` — план релизов.
 - `CONTRIBUTING.md` — как разрабатывать.
 - `CLAUDE.md` — контекст для агентов/разработчиков.

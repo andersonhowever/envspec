@@ -38,10 +38,10 @@
 
 > JSON-источник и YAML-источник (extra) уже реализованы в `sources.py` авансом из v0.5.
 
-## v0.5 — источники YAML/JSON + extras
+## v0.5 — источники YAML/JSON + extras ✓
 - [x] `sources.py`: YAML (extra `envspec[yaml]`) и JSON.
-- [ ] Опциональный pydantic-интероп (extra `envspec[pydantic]`).
-- [ ] Документация по источникам и приоритету.
+- [x] Опциональный pydantic-интероп (extra `envspec[pydantic]`): `to_pydantic`.
+- [x] Документация по источникам и приоритету (`docs/sources.md`).
 
 ## v1.0 — стабилизация и публикация
 - [ ] Заморозка публичного API (semver-гарантии).

@@ -159,7 +159,39 @@ Markdown-таблица: `Переменная | Тип | Обязательна
 
 ---
 
-## 7. Критерии приёмки (для тестов)
+## 7. Pydantic-интероп (extra `envspec[pydantic]`)
+
+Опциональный мост: из определения `Config` сгенерировать модель **pydantic v2**.
+Направление одно — envspec → pydantic (envspec остаётся единственным источником
+истины: «опиши конфиг один раз»). Ядро остаётся zero-deps; интероп живёт в
+`envspec.contrib.pydantic` и импортируется только при наличии extra.
+
+```python
+from envspec.contrib.pydantic import to_pydantic
+
+Model = to_pydantic(AppConfig)            # type[pydantic.BaseModel]
+m = Model(API_URL="https://x", TIMEOUT_S=30)
+```
+
+`to_pydantic(config_cls, *, name=None) -> type[BaseModel]`:
+- Имя модели: `name` или `<ConfigName>Model`.
+- Имя поля модели = env-имя поля (`api_url` → `API_URL`, либо явный `env=`),
+  чтобы модель принимала те же ключи, что и переменные окружения.
+- Соответствие типов: `str/int/float/bool` → как есть; `list[str]` → `list[str]`;
+  `"json"` → `Any`.
+- `required=True` → обязательное поле; иначе — поле с `default` (или `None`, если
+  дефолта нет; тип становится `Optional`).
+- Границы: для `int/float` → `ge`/`le`; для `str`/`list` → `min_length`/`max_length`.
+- `choices` → `Literal[...]`.
+- `doc` → `description`; `secret=True` → `json_schema_extra={"secret": True}`.
+- Если pydantic не установлен — `SpecError` с подсказкой `pip install 'envspec[pydantic]'`.
+
+Что НЕ делаем (scope guard): обратное направление (pydantic → envspec), генерацию
+`BaseSettings`, кастомные валидаторы pydantic. Только структурный маппинг определения.
+
+---
+
+## 8. Критерии приёмки (для тестов)
 
 - Отсутствие `required` → ошибка с подсказкой; код выхода 1.
 - Значение вне `min/max`/`choices` → ошибка с диапазоном.
@@ -171,3 +203,5 @@ Markdown-таблица: `Переменная | Тип | Обязательна
 - `diff` корректно классифицирует added/removed/changed.
 - `migrate` без `--write` ничего не меняет на диске.
 - `--format json` даёт валидный JSON для validate/diff/doctor.
+- `to_pydantic` строит модель с корректными типами, required/default, границами,
+  `choices` (Literal) и пометкой secret; имена полей = env-имена.
